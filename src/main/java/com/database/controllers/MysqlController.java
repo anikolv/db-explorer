@@ -2,6 +2,7 @@ package com.database.controllers;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -11,11 +12,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.database.services.MysqlService;
 
-
 @Controller
 @RequestMapping("/mysql")
 public class MysqlController {
-	
+
 	@Autowired
 	MysqlService mysqlService;
 
@@ -27,19 +27,34 @@ public class MysqlController {
 			return "schemas";
 		} catch (SQLException e) {
 			model.addAttribute("message", e.getMessage());
-			return "exception";		
+			return "exception";
 		}
 	}
-	
+
 	@RequestMapping("/schema/{schemaName}")
 	public String openSchema(@PathVariable("schemaName") String schemaName, Model model) {
 		try {
 			List<String> tables = mysqlService.getTablesFor(schemaName);
+			model.addAttribute("schema", schemaName);
 			model.addAttribute("tables", tables);
 			return "tables";
 		} catch (SQLException e) {
 			model.addAttribute("message", e.getMessage());
-			return "exception";		
+			return "exception";
+		}
+	}
+
+	@RequestMapping("/schema/{schemaName}/table/{tableName}")
+	public String openTable(@PathVariable("schemaName") String schemaName,
+			@PathVariable("tableName") String tableName, Model model) {
+		try {
+			Map<String, List<String>> columnToValuesMap = mysqlService.getContentOf(tableName, schemaName);
+			model.addAttribute("schema", schemaName);
+			model.addAttribute("columnNameToValuesMap", columnToValuesMap);
+			return "table-content";
+		} catch (SQLException e) {
+			model.addAttribute("message", e.getMessage());
+			return "exception";
 		}
 	}
 

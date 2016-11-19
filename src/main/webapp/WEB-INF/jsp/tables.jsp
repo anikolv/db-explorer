@@ -11,7 +11,7 @@
 
 	<p>Tables:</p>
 	<c:forEach items="${tables}" var="table">
-    		<a href="mysql/schema/${table}">${table}</a><br>
+    		<a href="/mysql/schema/${schema}/table/${table}">${table}</a><br>
 	</c:forEach>
 </body>
 </html>
