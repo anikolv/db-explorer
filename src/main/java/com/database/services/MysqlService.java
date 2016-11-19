@@ -16,10 +16,10 @@ public class MysqlService {
 
 	@Value("${mysqlProperties.url}")
 	private String url;
-	
+
 	@Value("${mysqlProperties.username}")
 	private String username;
-	
+
 	@Value("${mysqlProperties.password}")
 	private String password;
 
@@ -36,6 +36,18 @@ public class MysqlService {
 			schemas.add(catalogs.getString(1));
 		}
 		return schemas;
+	}
+
+	public List<String> getTablesFor(String schemaName) throws SQLException {
+		List<String> tables = new ArrayList<String>();
+		Connection connection = getConnection(schemaName);
+		DatabaseMetaData meta = connection.getMetaData();
+		String[] types = {"TABLE"};
+		ResultSet tableNames = meta.getTables(null, null, "%", types);
+		while (tableNames.next()) {
+			tables.add(tableNames.getString("TABLE_NAME"));
+		}
+		return tables;
 	}
 
 }

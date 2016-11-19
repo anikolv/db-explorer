@@ -5,13 +5,13 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
-<title>Mysql database schema explorer</title>
+<title>Mysql database explorer</title>
 </head>
 <body>
 
-	<p>Local MySQL schemas:</p>
-	<c:forEach items="${schemas}" var="schema">
-    		<a href="schema/${schema}">${schema}</a><br>
+	<p>Tables:</p>
+	<c:forEach items="${tables}" var="table">
+    		<a href="mysql/schema/${table}">${table}</a><br>
 	</c:forEach>
 </body>
 </html>
