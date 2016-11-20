@@ -34,7 +34,7 @@ public class MysqlController {
 	@RequestMapping("/schema/{schemaName}")
 	public String openSchema(@PathVariable("schemaName") String schemaName, Model model) {
 		try {
-			List<String> tables = mysqlService.getTablesFor(schemaName);
+			Map<String, List<String>>  tables = mysqlService.getTablesMetadataBySchema(schemaName);
 			model.addAttribute("schema", schemaName);
 			model.addAttribute("tables", tables);
 			return "tables";
@@ -48,7 +48,7 @@ public class MysqlController {
 	public String openTable(@PathVariable("schemaName") String schemaName,
 			@PathVariable("tableName") String tableName, Model model) {
 		try {
-			Map<String, List<String>> columnToValuesMap = mysqlService.getContentOf(tableName, schemaName);
+			Map<String, List<String>> columnToValuesMap = mysqlService.getTableData(tableName, schemaName);
 			model.addAttribute("schema", schemaName);
 			model.addAttribute("columnNameToValuesMap", columnToValuesMap);
 			return "table-content";

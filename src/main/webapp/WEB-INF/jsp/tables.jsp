@@ -5,13 +5,33 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
-<title>Mysql database explorer</title>
+<title>Mysql database schema explorer</title>
 </head>
 <body>
 
-	<p>Tables:</p>
-	<c:forEach items="${tables}" var="table">
-    		<a href="/mysql/schema/${schema}/table/${table}">${table}</a><br>
-	</c:forEach>
+	<p>Tables metadata</p>
+	<div style="white-space: nowrap;">
+		<c:forEach items="${tables}" var="table">
+			<table style="display: inline-block;">
+				<tr>
+					<th>${table.key}</th>
+				</tr>
+				<c:forEach items="${table.value}" var="value">
+					<tr>
+						<td>
+							<c:choose>
+								<c:when test="${table.key=='TABLE_NAME'}">
+									<p><a href="/mysql/schema/${schema}/table/${value}">${value}</a></p>
+								</c:when>
+								<c:otherwise>
+									<p>${value}</p>
+								</c:otherwise>
+							</c:choose>
+						</td>
+					</tr>
+				</c:forEach>
+			</table>
+		</c:forEach>
+	</div>
 </body>
 </html>
