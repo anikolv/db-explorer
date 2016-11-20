@@ -14,15 +14,15 @@
 		<div class="container-fluid">
 			<div class="navbar-header">
 				<img style="width: 40px; height: 47px;"
-					src="http://megaicons.net/static/img/icons_sizes/8/178/512/data-add-database-icon.png">
-				<a href="#" class="navbar-brand">Database explorer application</a>
+					src="/resources/images/icon.png">
+				<a href="/" class="navbar-brand">Database explorer application</a>
 			</div>
 		</div>
 	</nav>
 	
 	<div class="container">
 		<div class="row">
-			<div class="col-lg-12 text-center">
+			<div class="col-lg-12 text-center" style="margin-bottom: 100px;">
 				<h1>Tables metadata for schema: ${schema}</h1>
 			</div>
 		</div>

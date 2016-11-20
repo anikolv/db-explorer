@@ -50,6 +50,7 @@ public class MysqlController {
 		try {
 			Map<String, List<String>> columnToValuesMap = mysqlService.getTableData(tableName, schemaName);
 			model.addAttribute("schema", schemaName);
+			model.addAttribute("table", tableName);
 			model.addAttribute("columnNameToValuesMap", columnToValuesMap);
 			return "table-content";
 		} catch (SQLException e) {

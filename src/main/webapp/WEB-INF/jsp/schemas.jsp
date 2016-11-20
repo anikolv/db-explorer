@@ -14,15 +14,15 @@
 		<div class="container-fluid">
 			<div class="navbar-header">
 				<img style="width: 40px; height: 47px;"
-					src="http://megaicons.net/static/img/icons_sizes/8/178/512/data-add-database-icon.png">
-				<a href="#" class="navbar-brand">Database explorer application</a>
+					src="/resources/images/icon.png">
+				<a href="/" class="navbar-brand">Database explorer application</a>
 			</div>
 		</div>
 	</nav>
 	<div class="container">
 		<div class="row">
 			<div class="col-lg-12 text-center">
-				<h1>Database server schemas:</h1>
+				<h1 style="margin-bottom: 100px;">MySQL server schemas:</h1>
 				<ul class="list-unstyled">
 					<c:forEach items="${schemas}" var="schema">
 	    				<li><p class="lead"><a class="btn btn-primary" style="width: 500px;" href="${schema}">${schema}</a></p></li><br>
