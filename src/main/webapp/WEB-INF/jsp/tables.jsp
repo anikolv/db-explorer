@@ -21,7 +21,7 @@
 						<td>
 							<c:choose>
 								<c:when test="${table.key=='TABLE_NAME'}">
-									<p><a href="/mysql/schema/${schema}/table/${value}">${value}</a></p>
+									<p><a href="${schema}/${value}">${value}</a></p>
 								</c:when>
 								<c:otherwise>
 									<p>${value}</p>

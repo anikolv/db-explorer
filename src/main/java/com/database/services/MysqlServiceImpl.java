@@ -44,6 +44,7 @@ public class MysqlServiceImpl implements MysqlService {
 	 */
 	@Override
 	public List<String> getAllSchemas() throws SQLException {
+		
 		List<String> schemas = new ArrayList<String>();
 		Connection connection = getConnection("");
 		DatabaseMetaData meta = connection.getMetaData();

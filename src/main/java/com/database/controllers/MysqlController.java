@@ -31,7 +31,7 @@ public class MysqlController {
 		}
 	}
 
-	@RequestMapping("/schema/{schemaName}")
+	@RequestMapping("/{schemaName}")
 	public String openSchema(@PathVariable("schemaName") String schemaName, Model model) {
 		try {
 			Map<String, List<String>>  tables = mysqlService.getTablesMetadataBySchema(schemaName);
@@ -44,7 +44,7 @@ public class MysqlController {
 		}
 	}
 
-	@RequestMapping("/schema/{schemaName}/table/{tableName}")
+	@RequestMapping("/{schemaName}/{tableName}")
 	public String openTable(@PathVariable("schemaName") String schemaName,
 			@PathVariable("tableName") String tableName, Model model) {
 		try {

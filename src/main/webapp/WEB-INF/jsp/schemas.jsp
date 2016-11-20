@@ -11,7 +11,7 @@
 
 	<p>Local MySQL schemas:</p>
 	<c:forEach items="${schemas}" var="schema">
-    		<a href="schema/${schema}">${schema}</a><br>
+    		<a href="${schema}">${schema}</a><br>
 	</c:forEach>
 </body>
 </html>
