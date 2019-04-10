@@ -10,19 +10,24 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.database.services.MysqlService;
+import com.database.services.ConnectionTypeHolder;
+import com.database.services.SqlService;
 
 @Controller
-@RequestMapping("/mysql")
-public class MysqlController {
+@RequestMapping("/sql")
+public class SqlController {
 
 	@Autowired
-	MysqlService mysqlService;
+	private SqlService sqlServiceProxy;
+	
+	@Autowired
+	private ConnectionTypeHolder connectionTypeHolder;
 
-	@RequestMapping("/schemas")
-	public String getSchemas(Model model) {
+	@RequestMapping("/schemas/{sqlServer}")
+	public String getSchemas(@PathVariable("sqlServer") String sqlServer, Model model) {
 		try {
-			List<String> schemas = mysqlService.getAllSchemas();
+			connectionTypeHolder.setConnectionType(sqlServer);
+			List<String> schemas = sqlServiceProxy.getAllSchemas();
 			model.addAttribute("schemas", schemas);
 			return "schemas";
 		} catch (SQLException e) {
@@ -34,7 +39,7 @@ public class MysqlController {
 	@RequestMapping("/{schemaName}")
 	public String openSchema(@PathVariable("schemaName") String schemaName, Model model) {
 		try {
-			Map<String, List<String>>  tables = mysqlService.getTablesMetadataBySchema(schemaName);
+			Map<String, List<String>>  tables = sqlServiceProxy.getTablesMetadataBySchema(schemaName);
 			model.addAttribute("schema", schemaName);
 			model.addAttribute("tables", tables);
 			return "tables";
@@ -48,7 +53,7 @@ public class MysqlController {
 	public String openTable(@PathVariable("schemaName") String schemaName,
 			@PathVariable("tableName") String tableName, Model model) {
 		try {
-			Map<String, List<String>> columnToValuesMap = mysqlService.getTableData(tableName, schemaName);
+			Map<String, List<String>> columnToValuesMap = sqlServiceProxy.getTableData(tableName, schemaName);
 			model.addAttribute("schema", schemaName);
 			model.addAttribute("table", tableName);
 			model.addAttribute("columnNameToValuesMap", columnToValuesMap);

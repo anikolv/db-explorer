@@ -2,7 +2,6 @@ package com.database.services;
 
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
-import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
@@ -13,20 +12,21 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import javax.annotation.PostConstruct;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-@Service
-public class MysqlServiceImpl implements MysqlService {
+import com.database.factory.ConnectionManagerFactory;
 
-	@Value("${mysqlProperties.url}")
-	private String url;
-
-	@Value("${mysqlProperties.username}")
-	private String username;
-
-	@Value("${mysqlProperties.password}")
-	private String password;
+@Service("sqlService")
+public class SqlServiceImpl implements SqlService {
+	
+	@Autowired
+	private ConnectionTypeHolder connectionTypeHolder;
+	
+	private String connectionType;
 
 	@Value("${sql.query.all}")
 	private String selectAllQuery;
@@ -36,17 +36,18 @@ public class MysqlServiceImpl implements MysqlService {
 
 	@Value("${sql.query.information.order}")
 	private String selectInfoQueryOrder;
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.database.services.MysqlService#getAllSchemas()
-	 */
+	
+	@PostConstruct
+	public void init() {
+		connectionType = connectionTypeHolder.getConnectionType();
+	}
+	
 	@Override
 	public List<String> getAllSchemas() throws SQLException {
 		
 		List<String> schemas = new ArrayList<String>();
-		Connection connection = getConnection("");
+		Connection connection = ConnectionManagerFactory.getConnectionManager(connectionType).getConnection("");
+
 		DatabaseMetaData meta = connection.getMetaData();
 		ResultSet catalogs = meta.getCatalogs();
 		while (catalogs.next()) {
@@ -55,13 +56,7 @@ public class MysqlServiceImpl implements MysqlService {
 		return schemas;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * com.database.services.MysqlService#getTablesMetadataBySchema(java.lang.
-	 * String)
-	 */
+
 	@Override
 	public Map<String, List<String>> getTablesMetadataBySchema(String schemaName) throws SQLException {
 
@@ -71,12 +66,6 @@ public class MysqlServiceImpl implements MysqlService {
 
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.database.services.MysqlService#getTableData(java.lang.String,
-	 * java.lang.String)
-	 */
 	@Override
 	public Map<String, List<String>> getTableData(String tableName, String schemaName) throws SQLException {
 
@@ -86,18 +75,9 @@ public class MysqlServiceImpl implements MysqlService {
 
 	}
 
-	/**
-	 * @param sqlQuery
-	 * @param schemaName
-	 * @return
-	 * @throws SQLException
-	 * 
-	 * Compose map from resultSet with key = columnName and value = list of column values
-	 * 
-	 */
 	private Map<String, List<String>> composeMapFromResultSet(String sqlQuery, String schemaName) throws SQLException {
-
-		Connection connection = getConnection(schemaName);
+		
+		Connection connection = ConnectionManagerFactory.getConnectionManager(connectionType).getConnection(schemaName);
 		Statement stmt = connection.createStatement();
 		ResultSet rs = stmt.executeQuery(sqlQuery);
 		ResultSetMetaData rsmd = rs.getMetaData();
@@ -127,16 +107,4 @@ public class MysqlServiceImpl implements MysqlService {
 		return columnNameToValuesMap;
 
 	}
-
-	/**
-	 * @param database
-	 * @return
-	 * @throws SQLException
-	 * 
-	 * Initialize jdbc connection
-	 */
-	private Connection getConnection(String database) throws SQLException {
-		return DriverManager.getConnection(url + database, username, password);
-	}
-
 }
