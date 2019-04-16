@@ -1,12 +1,20 @@
 package com.database.services;
 
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Component;
-
-@Component
-@Scope("session") 
 public class ConnectionTypeHolder {
+	private static ConnectionTypeHolder INSTANCE = null;
 	private String connectionType;
+	private ConnectionTypeHolder() {}
+	
+	 public static ConnectionTypeHolder getInstance() {
+	        if (INSTANCE == null) {
+	            synchronized (ConnectionTypeHolder.class) {
+	                if (INSTANCE == null) {
+	                	INSTANCE = new ConnectionTypeHolder();
+	                }
+	            }
+	        }
+	        return INSTANCE;
+	    }
 
 	public String getConnectionType() {
 		return connectionType;

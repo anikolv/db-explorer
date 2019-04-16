@@ -12,10 +12,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import javax.annotation.PostConstruct;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.database.factory.ConnectionManagerFactory;
@@ -23,30 +19,16 @@ import com.database.factory.ConnectionManagerFactory;
 @Service("sqlService")
 public class SqlServiceImpl implements SqlService {
 	
-	@Autowired
-	private ConnectionTypeHolder connectionTypeHolder;
+	/* factory and strategy patterns */
 	
-	private String connectionType;
-
-	@Value("${sql.query.all}")
-	private String selectAllQuery;
-
-	@Value("${sql.query.information}")
-	private String selectInfoQuery;
-
-	@Value("${sql.query.information.order}")
-	private String selectInfoQueryOrder;
-	
-	@PostConstruct
-	public void init() {
-		connectionType = connectionTypeHolder.getConnectionType();
-	}
+	private ConnectionTypeHolder connectionTypeHolder = ConnectionTypeHolder.getInstance();
 	
 	@Override
 	public List<String> getAllSchemas() throws SQLException {
 		
 		List<String> schemas = new ArrayList<String>();
-		Connection connection = ConnectionManagerFactory.getConnectionManager(connectionType).getConnection("");
+		Connection connection = ConnectionManagerFactory.getConnectionManager(connectionTypeHolder.getConnectionType())
+				.getConnection("");
 
 		DatabaseMetaData meta = connection.getMetaData();
 		ResultSet catalogs = meta.getCatalogs();
@@ -60,7 +42,10 @@ public class SqlServiceImpl implements SqlService {
 	@Override
 	public Map<String, List<String>> getTablesMetadataBySchema(String schemaName) throws SQLException {
 
-		String sqlQuery = selectInfoQuery + schemaName + selectInfoQueryOrder;
+		String sqlQuery = "SELECT * "
+						+ "FROM information_schema.tables "
+						+ "WHERE table_schema='" + schemaName + "' "
+						+ "ORDER BY table_name";
 		Map<String, List<String>> columnNameToValuesMap = composeMapFromResultSet(sqlQuery, schemaName);
 		return columnNameToValuesMap;
 
@@ -69,7 +54,8 @@ public class SqlServiceImpl implements SqlService {
 	@Override
 	public Map<String, List<String>> getTableData(String tableName, String schemaName) throws SQLException {
 
-		String sqlQuery = selectAllQuery + tableName;
+		String sqlQuery = "SELECT * "
+						+ "FROM " + tableName;
 		Map<String, List<String>> columnNameToValuesMap = composeMapFromResultSet(sqlQuery, schemaName);
 		return columnNameToValuesMap;
 
@@ -77,7 +63,7 @@ public class SqlServiceImpl implements SqlService {
 
 	private Map<String, List<String>> composeMapFromResultSet(String sqlQuery, String schemaName) throws SQLException {
 		
-		Connection connection = ConnectionManagerFactory.getConnectionManager(connectionType).getConnection(schemaName);
+		Connection connection = ConnectionManagerFactory.getConnectionManager(connectionTypeHolder.getConnectionType()).getConnection(schemaName);
 		Statement stmt = connection.createStatement();
 		ResultSet rs = stmt.executeQuery(sqlQuery);
 		ResultSetMetaData rsmd = rs.getMetaData();

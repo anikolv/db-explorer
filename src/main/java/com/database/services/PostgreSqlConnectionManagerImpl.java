@@ -1,8 +1,9 @@
 package com.database.services;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
+
+import org.springframework.jdbc.datasource.DriverManagerDataSource;
 
 public class PostgreSqlConnectionManagerImpl implements ConnectionManager {
 	
@@ -12,7 +13,12 @@ public class PostgreSqlConnectionManagerImpl implements ConnectionManager {
 
 	@Override
 	public Connection getConnection(String database) throws SQLException {
-		return DriverManager.getConnection(url + database, username, password);
+		DriverManagerDataSource dataSource = new DriverManagerDataSource();
+        dataSource.setDriverClassName("org.h2.Driver");
+        dataSource.setUrl(url + database);
+        dataSource.setUsername(username);
+        dataSource.setPassword(password);
+        return dataSource.getConnection();
 	}
 
 }
