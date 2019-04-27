@@ -8,9 +8,9 @@ import com.database.builders.JdbcConnectionBuilder;
 public class PostgreSqlConnectionManagerImpl implements ConnectionManager {
 	
 	private String url = "jdbc:postgresql://localhost/";
-	private String username = "bss";
-	private String password = "RN123uTa";
-	private String database = "bss_voo_demo";
+	private String username = "";
+	private String password = "";
+	private String database = "";
 
 	@Override
 	public Connection getConnection() throws SQLException {
