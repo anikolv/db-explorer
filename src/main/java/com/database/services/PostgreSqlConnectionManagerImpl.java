@@ -10,10 +10,11 @@ public class PostgreSqlConnectionManagerImpl implements ConnectionManager {
 	private String url = "jdbc:postgresql://localhost/";
 	private String username = "bss";
 	private String password = "RN123uTa";
+	private String database = "bss_voo_demo";
 
 	@Override
-	public Connection getConnection(String database) throws SQLException {
-		return new JdbcConnectionBuilder(url + (database.isEmpty() ? "bss_voo_demo" : database))
+	public Connection getConnection() throws SQLException {
+		return new JdbcConnectionBuilder(url + database)
 				.driverClassName("org.postgresql.Driver")
 				.username(username)
 				.password(password)

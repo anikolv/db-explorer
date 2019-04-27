@@ -6,12 +6,13 @@ import java.sql.SQLException;
 
 public class MySqlConnectionManagerImpl implements ConnectionManager {
 	
-	private String url = "jdbc:mysql://127.0.0.1:3306/";
-	private String username = "root";
+	private String url = "jdbc:mysql://localhost:3306/";
+	private String username = "";
 	private String password = "";
+	private String database = "";
 
 	@Override
-	public Connection getConnection(String database) throws SQLException {
+	public Connection getConnection() throws SQLException {
 		return DriverManager.getConnection(url + database, username, password);
 	}
 }

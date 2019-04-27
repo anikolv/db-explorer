@@ -28,7 +28,7 @@ public class SqlServiceImpl implements SqlService {
 		
 		List<String> schemas = new ArrayList<String>();
 		Connection connection = ConnectionManagerFactory.getConnectionManager(connectionTypeHolder.getConnectionType())
-				.getConnection("");
+				.getConnection();
 
 		DatabaseMetaData meta = connection.getMetaData();
 		ResultSet catalogs = connectionTypeHolder.getConnectionType().equals("mysql") ? meta.getCatalogs()
@@ -65,7 +65,7 @@ public class SqlServiceImpl implements SqlService {
 
 	private Map<String, List<String>> composeMapFromResultSet(String sqlQuery, String schemaName) throws SQLException {
 		
-		Connection connection = ConnectionManagerFactory.getConnectionManager(connectionTypeHolder.getConnectionType()).getConnection("");
+		Connection connection = ConnectionManagerFactory.getConnectionManager(connectionTypeHolder.getConnectionType()).getConnection();
 		Statement stmt = connection.createStatement();
 		ResultSet rs = stmt.executeQuery(sqlQuery);
 		ResultSetMetaData rsmd = rs.getMetaData();
