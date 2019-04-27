@@ -19,7 +19,7 @@ import com.database.factory.ConnectionManagerFactory;
 @Service("sqlService")
 public class SqlServiceImpl implements SqlService {
 	
-	/* factory and strategy patterns */
+	/* factory, strategy, builder patterns */
 	
 	private ConnectionTypeHolder connectionTypeHolder = ConnectionTypeHolder.getInstance();
 	
@@ -31,10 +31,12 @@ public class SqlServiceImpl implements SqlService {
 				.getConnection("");
 
 		DatabaseMetaData meta = connection.getMetaData();
-		ResultSet catalogs = meta.getCatalogs();
+		ResultSet catalogs = connectionTypeHolder.getConnectionType().equals("mysql") ? meta.getCatalogs()
+				: meta.getSchemas();
 		while (catalogs.next()) {
 			schemas.add(catalogs.getString(1));
 		}
+		catalogs.close();
 		return schemas;
 	}
 
@@ -63,7 +65,7 @@ public class SqlServiceImpl implements SqlService {
 
 	private Map<String, List<String>> composeMapFromResultSet(String sqlQuery, String schemaName) throws SQLException {
 		
-		Connection connection = ConnectionManagerFactory.getConnectionManager(connectionTypeHolder.getConnectionType()).getConnection(schemaName);
+		Connection connection = ConnectionManagerFactory.getConnectionManager(connectionTypeHolder.getConnectionType()).getConnection("");
 		Statement stmt = connection.createStatement();
 		ResultSet rs = stmt.executeQuery(sqlQuery);
 		ResultSetMetaData rsmd = rs.getMetaData();

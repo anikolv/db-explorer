@@ -22,10 +22,10 @@
 	<div class="container">
 		<div class="row">
 			<div class="col-lg-12 text-center">
-				<h1 style="margin-bottom: 100px;">MySQL server schemas:</h1>
+				<h1 style="margin-bottom: 100px;">Server schemas:</h1>
 				<ul class="list-unstyled">
 					<c:forEach items="${schemas}" var="schema">
-	    				<li><p class="lead"><a class="btn btn-primary" style="width: 500px;" href="${schema}">${schema}</a></p></li><br>
+	    				<li><p class="lead"><a class="btn btn-primary" style="width: 500px;" href="/sql/${schema}">${schema}</a></p></li><br>
 					</c:forEach>
 				</ul>
 			</div>

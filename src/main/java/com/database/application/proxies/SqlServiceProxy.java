@@ -4,29 +4,16 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 
-import javax.annotation.PostConstruct;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.database.services.ConnectionTypeHolder;
 import com.database.services.SqlService;
 
 @Service("sqlServiceProxy")
 public class SqlServiceProxy implements SqlService {
 	
 	@Autowired
-	private ConnectionTypeHolder connectionTypeHolder;
-	
-	@Autowired
 	private SqlService sqlService;
-	
-	private String connectionType;
-	
-	@PostConstruct
-	public void init() {
-		connectionType = connectionTypeHolder.getConnectionType();
-	}
 
 	@Override
 	public List<String> getAllSchemas() throws SQLException {

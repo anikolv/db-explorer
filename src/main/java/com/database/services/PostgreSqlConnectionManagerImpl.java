@@ -3,7 +3,7 @@ package com.database.services;
 import java.sql.Connection;
 import java.sql.SQLException;
 
-import org.springframework.jdbc.datasource.DriverManagerDataSource;
+import com.database.builders.JdbcConnectionBuilder;
 
 public class PostgreSqlConnectionManagerImpl implements ConnectionManager {
 	
@@ -13,12 +13,11 @@ public class PostgreSqlConnectionManagerImpl implements ConnectionManager {
 
 	@Override
 	public Connection getConnection(String database) throws SQLException {
-		DriverManagerDataSource dataSource = new DriverManagerDataSource();
-        dataSource.setDriverClassName("org.h2.Driver");
-        dataSource.setUrl(url + database);
-        dataSource.setUsername(username);
-        dataSource.setPassword(password);
-        return dataSource.getConnection();
+		return new JdbcConnectionBuilder(url + (database.isEmpty() ? "bss_voo_demo" : database))
+				.driverClassName("org.postgresql.Driver")
+				.username(username)
+				.password(password)
+				.build();
 	}
 
 }

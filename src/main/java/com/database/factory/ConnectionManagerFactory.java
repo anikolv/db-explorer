@@ -9,9 +9,9 @@ public final class ConnectionManagerFactory {
 	private ConnectionManagerFactory() {}
 	
 	public static ConnectionManager getConnectionManager(String sqlServer) {
-		if (sqlServer == "mysql") {
+		if (sqlServer.equals("mysql")) {
 			return new MySqlConnectionManagerImpl();
-		} else if (sqlServer == "postgres") {
+		} else if (sqlServer.equals("postgresql")) {
 			return new PostgreSqlConnectionManagerImpl();
 		}
 		return null;
